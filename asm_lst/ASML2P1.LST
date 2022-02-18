@@ -1,0 +1,34 @@
+DUNFIELD 8051 ASSEMBLER: asml2p1                                      PAGE: 1
+
+0000                         1    ORG 0000h				Start at location 0
+0000  02 00 0E               2    LJMP BEGIN			Begin from BEGIN
+000B                         3    ORG 000bh				Set up ISR address
+000B  02 00 23               4    LJMP ISR_BEGIN		Jump to IRQ Handler
+000E                         5  BEGIN:
+000E  78 06                  6    MOV R0,#6				Counter is set as 6
+0010  75 89 01               7    MOV TMOD,#01H			Setting bits to start timer
+0013  75 A8 82               8    MOV IE,#82H			Interrupt enable for timer
+0016  75 8C 15               9    MOV TH0,#15H			Setting higher byte as 15H
+0019  75 8A 9F              10    MOV TL0,#9FH			Setting lower byte as 9FH -> 159FH = 5535 -> 65535 - 5535 = 60000
+001C  75 88 10              11    MOV TCON,#10H			Timer control register
+001F  80 00                 12    SJMP ENDLOOP			Go to infinite loop
+0021                        13  ENDLOOP:
+0021  80 FE                 14    SJMP ENDLOOP			Infinite loop
+0023                        15  ISR_BEGIN:				
+0023  E8                    16    MOV A,R0				Copy R0 value to A		
+0024  94 01                 17    SUBB A,#1H			Subtract 1 every time loop runs
+0026  F8                    18    MOV R0,A				Copy back to R0
+0027  60 02                 19    JZ TOGGLE				Toggle if R0 is 0
+0029  70 0E                 20    JNZ RESET				else Reset the timer
+002B                        21  TOGGLE:	
+002B  B2 94                 22    CPL P1.4				Toggle the pin
+002D  75 8C 15              23    MOV TH0,#15H			reset is for reset
+0030  75 8A 9F              24    MOV TL0,#9FH
+0033  75 88 10              25    MOV TCON,#10H
+0036  78 06                 26    MOV R0,#6
+0038  32                    27    RETI
+0039                        28  RESET:
+0039  75 8C 15              29    MOV TH0,#15H			Reset functionality
+003C  75 8A 9F              30    MOV TL0,#9FH
+003F  75 88 10              31    MOV TCON,#10H
+0042  32                    32    RETI
