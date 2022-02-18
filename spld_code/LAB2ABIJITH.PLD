@@ -1,0 +1,34 @@
+Name     Lab2Abijith ;
+PartNo   00 ;
+Date     2/18/2022 ;
+Revision 01 ;
+Designer Engineer ;
+Company  University of Colorado Boulder ;
+Assembly None ;
+Location  ;
+Device   g16v8a;
+
+/*
+ * Inputs:  define inputs to build simple gates from
+ */
+
+Pin 8 =  a;
+Pin 9 =  b;
+
+/*
+ * Outputs:  define outputs as active HI levels
+ *
+ */
+
+
+Pin 15 =  nand;
+
+
+/*
+ * Logic:  examples of simple gates expressed in CUPL
+ */
+
+
+nand = !(a&b);        /* nand gate */
+
+

@@ -21,6 +21,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include <stdbool.h>
 
 /* Private variables ---------------------------------------------------------*/
 TIM_HandleTypeDef htim9;
@@ -33,19 +34,24 @@ static void MX_GPIO_Init(void);
 /* Set up Timer */
 static void MX_TIM9_Init(void);
 
+bool togglePin = false;
+
 /* Handle Timer Interrupt */
 /* Toggle LED 5 at 300ms */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	if(htim->Instance==TIM9){
 		HAL_GPIO_TogglePin(GPIOD,GPIO_PIN_14);
 	}
+	if(togglePin){
+		HAL_GPIO_TogglePin(GPIOD,GPIO_PIN_12);
+		HAL_GPIO_TogglePin(GPIOD,GPIO_PIN_15);
+	}
 }
 
 /* Handle GPIO Interrupt */
 /* Toggle LED 4 and 6 */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
-	HAL_GPIO_TogglePin(GPIOD,GPIO_PIN_12);
-	HAL_GPIO_TogglePin(GPIOD,GPIO_PIN_15);
+	togglePin = !togglePin;
 }
 
 
